@@ -43,6 +43,8 @@ class _WelcomScreenState extends State<WelcomScreen> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+                const SizedBox(height: 20,),
+                //custom button
               ],
             ),
           ),
