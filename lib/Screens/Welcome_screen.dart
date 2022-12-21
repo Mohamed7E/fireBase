@@ -24,7 +24,7 @@ class _WelcomScreenState extends State<WelcomScreen> {
               
               children: [
                 Image.asset(
-                  "assets/images/image1.png",
+                  "assets/image1.png",
                   height: 300,
                 ),
                 const SizedBox(
