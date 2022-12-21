@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:firebase/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 
 class WelcomScreen extends StatefulWidget {
@@ -19,6 +20,7 @@ class _WelcomScreenState extends State<WelcomScreen> {
             padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 35),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              
               children: [
                 Image.asset(
                   "assets/images/image1.png",
@@ -45,6 +47,15 @@ class _WelcomScreenState extends State<WelcomScreen> {
                 ),
                 const SizedBox(height: 20,),
                 //custom button
+                SizedBox(
+                width: double.infinity,
+                height: 50,
+                child:CustomButton(
+                  onPressed: () { },
+                  text: "Get started",
+                ),
+              )
+            
               ],
             ),
           ),
