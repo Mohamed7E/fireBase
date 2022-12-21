@@ -1,3 +1,4 @@
+import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -9,6 +10,17 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController phoneController = TextEditingController();
+   Country selectedCountry = Country(
+      phoneCode: "20",
+      countryCode: "EG",
+      e164Sc: 0,
+      geographic: true,
+      level: 1,
+      name: "Egypt",
+      example: "Egypt",
+      displayName: "Egypt",
+      displayNameNoCountryCode: "EG",
+      e164Key: "");
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,6 +72,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       borderRadius: BorderRadius.circular(10),
                       borderSide: const BorderSide(color: Colors.black12),
                        ),
+                       prefixIcon: Container(
+                      padding: const EdgeInsets.all(8.0),
+                      child: InkWell(
+                        onTap: () {
+                          showCountryPicker(
+                              context: context,
+                              countryListTheme: const CountryListThemeData(
+                                bottomSheetHeight: 550,
+                              ),
+                              onSelect: (value) {
+                                setState(() {
+                                  selectedCountry = value;
+                                });
+                              });
+                        },
+                        child: Text(
+                          "${selectedCountry.flagEmoji} + ${selectedCountry.phoneCode}",
+                          style: const TextStyle(
+                              fontSize: 18,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
                   ),
                   ),
                   
@@ -70,4 +106,5 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
     );
   }
-}
+  
+ }
