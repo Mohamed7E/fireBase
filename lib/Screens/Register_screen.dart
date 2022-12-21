@@ -20,6 +20,23 @@ class RegisterScreen extends StatelessWidget {
                       shape: BoxShape.circle, color: Colors.purple.shade50),
                   child: Image.asset("assets/image2.png"),
                 ),
+                const SizedBox(
+                  height: 20,
+                ),
+                const Text("Register",
+                    style:
+                        TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+                const SizedBox(
+                  height: 10,
+                ),
+                const Text(
+                  "Add your phone number. We'll send you a verification code",
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.black38,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
               ],
             ),
           ),
