@@ -1,5 +1,6 @@
 // ignore_for_file: nullable_type_in_catch_clause, unused_field
 
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:firebase/model/user_model.dart';
@@ -17,7 +18,7 @@ class AuthProvider extends ChangeNotifier {
   String get uid => _uid!;
   UserModel? _userModel;
   UserModel get userModel => _userModel!;
-  
+
 final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
 final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
@@ -30,6 +31,12 @@ final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
   void checkSign() async {
     final SharedPreferences s = await SharedPreferences.getInstance();
     _isSignedIn = s.getBool("is_signedin") ?? false;
+    notifyListeners();
+  }
+  Future setSignIn() async {
+    final SharedPreferences s = await SharedPreferences.getInstance();
+    s.setBool("is_signedin", true);
+    _isSignedIn = true;
     notifyListeners();
   }
 
@@ -108,7 +115,27 @@ final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
   }) async {
     _isLoading = true;
     notifyListeners();
-    try {} on FirebaseAuthException catch (e) {
+    try {
+      // uploading image to firebase storage.
+      await storeFileToStorage("profilePic/$_uid", profilePic).then((value) {
+        userModel.profilePic = value;
+        userModel.createdAt = DateTime.now().millisecondsSinceEpoch.toString();
+        userModel.phoneNumber = _firebaseAuth.currentUser!.phoneNumber!;
+        userModel.uid = _firebaseAuth.currentUser!.phoneNumber!;
+      });
+      _userModel = userModel;
+
+      // uploading to database
+      await _firebaseFirestore
+          .collection("users")
+          .doc(_uid)
+          .set(userModel.toMap())
+          .then((value) {
+        onSuccess();
+        _isLoading = false;
+        notifyListeners();
+      });
+    } on FirebaseAuthException catch (e) {
       showSnackBar(context, e.message.toString());
       _isLoading = false;
       notifyListeners();
@@ -119,6 +146,11 @@ final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
     TaskSnapshot snapshot = await uploadTask;
     String downloadUrl = await snapshot.ref.getDownloadURL();
     return downloadUrl;
+  }
+  // STORING DATA LOCALLY
+  Future saveUserDataToSP() async {
+    SharedPreferences s = await SharedPreferences.getInstance();
+    await s.setString("user_model", jsonEncode(userModel.toMap()));
   }
   }
 

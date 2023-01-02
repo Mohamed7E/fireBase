@@ -35,11 +35,19 @@ class _UserInformationScreenState extends State<UserInformationScreen> {
   }
   @override
   Widget build(BuildContext context) {
+    final isLoading =
+        Provider.of<AuthProvider>(context, listen: true).isLoading;
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
+        child: isLoading == true
+            ? const Center(
+                child: CircularProgressIndicator(
+                  color: Colors.purple,
+                ),
+              )
+              : SingleChildScrollView(
           padding: const EdgeInsets.symmetric(vertical: 25.0, horizontal: 5.0),
-          child: Center(
+          child:Center(
             child: Column(
               children: [
                 InkWell(
@@ -165,7 +173,19 @@ class _UserInformationScreenState extends State<UserInformationScreen> {
         context: context,
         userModel: userModel,
         profilePic: image!,
-        onSuccess: () {},);
+        onSuccess: () {
+            ap.saveUserDataToSP().then(
+                (value) => ap.setSignIn().then(
+                      (value) => Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const HomeScreen(),
+                          ),
+                          (route) => false),
+                    ),
+              );
+        },
+      );
     } else {
       showSnackBar(context, "Please upload your profile photo");
     }
