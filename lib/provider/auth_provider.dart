@@ -1,4 +1,4 @@
-// ignore_for_file: nullable_type_in_catch_clause
+// ignore_for_file: nullable_type_in_catch_clause, unused_field
 
 import 'dart:io';
 
@@ -15,9 +15,12 @@ class AuthProvider extends ChangeNotifier {
   bool get isLoading => _isLoading;
   String? _uid;
   String get uid => _uid!;
+  UserModel? _userModel;
+  UserModel get userModel => _userModel!;
+  
 final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
-
+final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
 
   AuthProvider() {
     checkSign();
@@ -110,5 +113,12 @@ final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
       _isLoading = false;
       notifyListeners();
     }
-}}
+}
+ Future<String> storeFileToStorage(String ref, File file) async {
+    UploadTask uploadTask = _firebaseStorage.ref().child(ref).putFile(file);
+    TaskSnapshot snapshot = await uploadTask;
+    String downloadUrl = await snapshot.ref.getDownloadURL();
+    return downloadUrl;
+  }
+  }
 

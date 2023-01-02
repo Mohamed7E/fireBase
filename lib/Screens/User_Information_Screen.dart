@@ -170,4 +170,6 @@ class _UserInformationScreenState extends State<UserInformationScreen> {
       showSnackBar(context, "Please upload your profile photo");
     }
   }
+ 
+
 }
