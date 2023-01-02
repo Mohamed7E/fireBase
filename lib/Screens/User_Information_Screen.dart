@@ -1,8 +1,12 @@
 import 'dart:io';
+import 'package:firebase/Screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:provider/provider.dart';
 
+import '../model/user_model.dart';
+import '../provider/auth_provider.dart';
 import '../widgets/custom_button.dart';
 
 class UserInformationScreen extends StatefulWidget {
@@ -93,7 +97,7 @@ class _UserInformationScreenState extends State<UserInformationScreen> {
                   width: MediaQuery.of(context).size.width * 0.80,
                   child: CustomButton(
                     text: "Continue",
-                    onPressed: () {},
+                    onPressed: () =>storeData(),
                   ),
                 ),
               ],
@@ -142,5 +146,23 @@ class _UserInformationScreenState extends State<UserInformationScreen> {
         ),
       ),
     );
+  }
+  // store user data to database
+  void storeData() async {
+    final ap = Provider.of<AuthProvider>(context, listen: false);
+    UserModel userModel = UserModel(
+      name: nameController.text.trim(),
+      email: emailController.text.trim(),
+      bio: bioController.text.trim(),
+      profilePic: "",
+      createdAt: "",
+      phoneNumber: "",
+      uid: "",
+    );
+    if (image != null) {
+      
+    } else {
+      showSnackBar(context, "Please upload your profile photo");
+    }
   }
 }
