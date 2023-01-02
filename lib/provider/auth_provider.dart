@@ -1,3 +1,9 @@
+// ignore_for_file: nullable_type_in_catch_clause
+
+import 'dart:io';
+
+import 'package:firebase/model/user_model.dart';
+import 'package:firebase/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -91,8 +97,18 @@ final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
       return false;
     }
   }
-}
-
-mixin FirebaseFirestore {
-}
+    void saveUserDataToFirebase({
+    required BuildContext context,
+    required UserModel userModel,
+    required File profilePic,
+    required Function onSuccess,
+  }) async {
+    _isLoading = true;
+    notifyListeners();
+    try {} on FirebaseAuthException catch (e) {
+      showSnackBar(context, e.message.toString());
+      _isLoading = false;
+      notifyListeners();
+    }
+}}
 
