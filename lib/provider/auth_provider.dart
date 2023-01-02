@@ -147,10 +147,44 @@ final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
     String downloadUrl = await snapshot.ref.getDownloadURL();
     return downloadUrl;
   }
+
+Future getDataFromFirestore() async {
+    await _firebaseFirestore
+        .collection("users")
+        .doc(_firebaseAuth.currentUser!.uid)
+        .get()
+        .then((DocumentSnapshot snapshot) {
+      _userModel = UserModel(
+        name: snapshot['name'],
+        email: snapshot['email'],
+        createdAt: snapshot['createdAt'],
+        bio: snapshot['bio'],
+        uid: snapshot['uid'],
+        profilePic: snapshot['profilePic'],
+        phoneNumber: snapshot['phoneNumber'],
+      );
+      _uid = userModel.uid;
+    });
+  }
+
   // STORING DATA LOCALLY
   Future saveUserDataToSP() async {
     SharedPreferences s = await SharedPreferences.getInstance();
     await s.setString("user_model", jsonEncode(userModel.toMap()));
+  }
+  Future getDataFromSP() async {
+    SharedPreferences s = await SharedPreferences.getInstance();
+    String data = s.getString("user_model") ?? '';
+    _userModel = UserModel.fromMap(jsonDecode(data));
+    _uid = _userModel!.uid;
+    notifyListeners();
+  }
+   Future userSignOut() async {
+    SharedPreferences s = await SharedPreferences.getInstance();
+    await _firebaseAuth.signOut();
+    _isSignedIn = false;
+    notifyListeners();
+    s.clear();
   }
   }
 
