@@ -1,8 +1,12 @@
 import 'dart:math';
 
 import 'package:firebase/Screens/Register_screen.dart';
+import 'package:firebase/Screens/home_screen.dart';
 import 'package:firebase/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../provider/auth_provider.dart';
 
 class WelcomScreen extends StatefulWidget {
   const WelcomScreen({super.key});
@@ -14,6 +18,7 @@ class WelcomScreen extends StatefulWidget {
 class _WelcomScreenState extends State<WelcomScreen> {
   @override
   Widget build(BuildContext context) {
+     final ap = Provider.of<AuthProvider>(context, listen: false);
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -52,8 +57,13 @@ class _WelcomScreenState extends State<WelcomScreen> {
                 width: double.infinity,
                 height: 50,
                 child:CustomButton(
-                  onPressed: () { 
-                    Navigator.push(
+                  onPressed: () {
+                    ap.isSignedIn == true
+                        ? Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const HomeScreen()))
+                        : Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => const RegisterScreen()));
