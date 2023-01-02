@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 
 import '../provider/auth_provider.dart';
 import '../widgets/custom_button.dart';
+import 'User_Information_Screen.dart';
 
 class OTPScreen extends StatefulWidget {
   final String verificationId;
